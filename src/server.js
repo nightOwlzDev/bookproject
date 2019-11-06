@@ -1,36 +1,32 @@
 const express = require('express')
 
-const books = require('../src/db/db.json')
 const bodyParser = require('body-parser')
-
+const mongoose = require('mongoose')
+// import config from './config/config';
+const Product = require('./models/product')
+const Order = require('./models/order')
 const app = express()
+var cors = require('cors');
 
+app.use(cors({ origin:'http://localhost:3000'}));
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
-app.get('/', (req, res) => {
-    res.send('Hello World')
+mongoose.connect("mongodb://localhost:27017/luvreadproject", { useNewUrlParser: true })
+
+
+app.get('/products', async (req, res) => {
+    const products = await Product.find({})
+    res.json(products)
 })
 
-app.get('/books', (req, res) => {
-    res.json(books)
+app.post('/orders', async (req, res) => {
+    const payload = req.body
+    const order = new Order(payload)
+    await order.save()
+    res.status(201).end()
 })
 
-app.get('/books/:id', (req, res) => {
-    res.json(books.find(book => book.id === req.params.id))
-})
-
-app.post('/books', (req, res) => {
-    books.push(req.body)
-    res.status(201).json(req.body)
-})
-
-app.put('/books/:id', (req, res) => {
-    const updateIndex = books.findIndex(book => book.id === req.params.id)
-    res.json(Object.assign(books[updateIndex], req.body))
-})
-
-
-app.listen(3000, () => {
-    console.log('Start server at port 3000.')
+app.listen(3001, () => {
+    console.log('Application is running on port 3001')
 })
