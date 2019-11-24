@@ -4,8 +4,15 @@ const Schema = mongoose.Schema
 const orderSchema = new Schema({
     orderedDate: String,
     totalPrice: Number,
-    orders: String,
-    id: Number
+    orders: [{
+        product :{
+            productId: String,
+            productName: String,
+            unitPrice: String,
+            thumbnail: String
+        },
+        quantity : String
+    }]
 })
 
 const OrderModel = mongoose.model('orders', orderSchema)

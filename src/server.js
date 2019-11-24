@@ -20,6 +20,19 @@ app.get('/products', async (req, res) => {
     res.json(products)
 })
 
+app.delete('/products/:id', async (req, res) => {
+    const { id } = req.params
+    await Product.findByIdAndDelete(id)
+    res.status(204).end()
+
+})
+
+app.get('/orders', async (req, res) => {
+    const order = await Order.find({})
+    res.json(order)
+})
+
+
 app.post('/orders', async (req, res) => {
     const payload = req.body
     const order = new Order(payload)
@@ -27,6 +40,14 @@ app.post('/orders', async (req, res) => {
     res.status(201).end()
 })
 
-app.listen(3001, () => {
-    console.log('Application is running on port 3001')
+
+app.delete('/orders/:id', async (req, res) => {
+    const { id } = req.params
+    await Order.findByIdAndDelete(id)
+    res.status(204).end()
+
+  })
+
+app.listen(9000, () => {
+    console.log('Application is running on port 9000')
 })
