@@ -20,6 +20,21 @@ app.get('/products', async (req, res) => {
     res.json(products)
 })
 
+
+app.post('/products', async (req, res) => {
+    const payload = req.body
+    const product = new Product(payload)
+    await product.save()
+    res.status(201).end()
+})
+
+// app.put('/products', async (req, res) => {
+//     const payload = req.body
+//     const product = new Product(payload)
+//     await product.save()
+//     res.status(201).end()
+// })
+
 app.delete('/products/:id', async (req, res) => {
     const { id } = req.params
     await Product.findByIdAndDelete(id)
