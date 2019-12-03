@@ -1,1 +1,1 @@
-const config = "mongodb://localhost:27017/luvreadproject"
+export const config = "mongodb://localhost:27017/luvreadproject"

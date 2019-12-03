@@ -2,51 +2,38 @@ const express = require('express')
 
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
-// import config from './config/config';
-const Product = require('./models/product')
-const Order = require('./models/order')
+const Productmodule = require("./module/productmodule");
+const Ordermodule = require("./module/ordermodule");
 const app = express()
-var cors = require('cors');
+
+let cors = require('cors');
+let productmodule = new Productmodule();
+let ordermodule = new Ordermodule();
 
 app.use(cors({ origin:'http://localhost:3000'}));
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
-mongoose.connect("mongodb://localhost:27017/luvreadproject", { useNewUrlParser: true })
+mongoose.connect("mongodb://localhost:27017/luvreadproject", { useNewUrlParser: true });
 
+// ดึงข้อมูล products ทั้งหมด
+app.get("/products", productmodule.getProduct);
 
-app.get('/products', async (req, res) => {
-    const products = await Product.find({})
-    res.json(products)
-})
+// ลบข้อมูล products ที่ต้องการ
+app.delete("/products/:id", productmodule.delProduct);
 
-app.delete('/products/:id', async (req, res) => {
-    const { id } = req.params
-    await Product.findByIdAndDelete(id)
-    res.status(204).end()
+// เพิ่มข้อมูล products 
+app.post("/products", productmodule.addProduct);
 
-})
+// ดึงข้อมูล orders ทั้งหมด
+app.get("/orders", ordermodule.getOrder);
 
-app.get('/orders', async (req, res) => {
-    const order = await Order.find({})
-    res.json(order)
-})
+// เพิ่มข้อมูล orders 
+app.post("/orders", ordermodule.addOrder);
 
+// ลบข้อมูล orders ที่ต้องการ
+app.delete("/orders/:id", ordermodule.delOrder);
 
-app.post('/orders', async (req, res) => {
-    const payload = req.body
-    const order = new Order(payload)
-    await order.save()
-    res.status(201).end()
-})
-
-
-app.delete('/orders/:id', async (req, res) => {
-    const { id } = req.params
-    await Order.findByIdAndDelete(id)
-    res.status(204).end()
-
-  })
 
 app.listen(9000, () => {
     console.log('Application is running on port 9000')
