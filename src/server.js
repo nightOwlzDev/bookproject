@@ -5,8 +5,8 @@ const mongoose = require('mongoose')
 const Productmodule = require("./module/productmodule");
 const Ordermodule = require("./module/ordermodule");
 const app = express()
-
 let cors = require('cors');
+
 let productmodule = new Productmodule();
 let ordermodule = new Ordermodule();
 
@@ -15,6 +15,8 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
 mongoose.connect("mongodb://localhost:27017/luvreadproject", { useNewUrlParser: true })
+
+const port = process.env.PORT || 9000;
 
 // ดึงข้อมูล products ทั้งหมด
 app.get("/products", productmodule.getProduct);
@@ -35,6 +37,6 @@ app.post("/orders", ordermodule.addOrder);
 app.delete("/orders/:id", ordermodule.delOrder);
 
 
-app.listen(9000, () => {
-    console.log('Application is running on port 9000')
-})
+app.listen(port, () => {
+  console.log("Application is running on port 9000");
+});
