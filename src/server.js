@@ -5,8 +5,8 @@ const mongoose = require('mongoose')
 const Productmodule = require("./module/productmodule");
 const Ordermodule = require("./module/ordermodule");
 const app = express()
-
 let cors = require('cors');
+
 let productmodule = new Productmodule();
 let ordermodule = new Ordermodule();
 
@@ -41,6 +41,6 @@ app.post("/orders", ordermodule.addOrder);
 app.delete("/orders/:id", ordermodule.delOrder);
 
 
-app.listen(9000, () => {
-    console.log('Application is running on port 9000')
-})
+app.listen(port, () => {
+  console.log("Application is running on port 9000");
+});
