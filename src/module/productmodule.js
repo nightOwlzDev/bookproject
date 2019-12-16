@@ -11,6 +11,29 @@ module.exports = class productmodule {
     res.json(products);
   }
 
+  async getProductByid(req, res) {
+    const { id } = req.params;
+    const products = await Product.findById(id);
+    res.json(products);
+  }
+
+  async updateProduct(req, res) {
+    const { id } = req.params;
+    const payload = req.body;
+
+    await Product.findByIdAndUpdate( id , payload ,{new: true}).then((data) =>{
+        if(data === null){
+            throw new Error('Cat Not Found');
+        }
+        res.json({ message: 'Cat updated!' })
+    }).catch( (error) => {
+        res.status(500).json({ message: 'Some Error!' })
+        console.log(error);
+    })
+    
+  }
+
+  
   async delProduct(req, res) {
     const { id } = req.params;
     await Product.findByIdAndDelete(id);
