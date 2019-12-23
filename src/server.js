@@ -4,11 +4,17 @@ const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const Productmodule = require("./module/productmodule");
 const Ordermodule = require("./module/ordermodule");
+const Usermodule = require("./module/usermodule");
+
+
 const app = express()
 let cors = require('cors');
 
 let productmodule = new Productmodule();
 let ordermodule = new Ordermodule();
+let usermodule = new Usermodule()
+
+const port = process.env.PORT || 9000;
 
 app.use(cors({ origin:'http://localhost:3000'}));
 app.use(bodyParser.json())
@@ -39,6 +45,9 @@ app.post("/orders", ordermodule.addOrder);
 
 // ลบข้อมูล orders ที่ต้องการ
 app.delete("/orders/:id", ordermodule.delOrder);
+
+// เพิ่ม user
+app.post("/users" , usermodule.addUser);
 
 
 app.listen(port, () => {
